@@ -24,3 +24,5 @@ export DOCKER_HOST=unix:///run/user/1000/podman/podman.sock
 
 - [x] Readme erstellen
 - [x] Quarkus projekt aufgebaut mit /blog endpoint
+- [ ] MariaDB container
+- [ ] Persistieren von Blogdateien

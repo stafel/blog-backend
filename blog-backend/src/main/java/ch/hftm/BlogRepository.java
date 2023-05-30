@@ -4,22 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
 @ApplicationScoped
-public class BlogRepository {
-    
-    private List<Blog> blogs = new ArrayList<>();
-
+public class BlogRepository implements PanacheRepository<Blog> {
     public BlogRepository() {
-        blogs.add(new Blog("First", "Hello World"));
-        blogs.add(new Blog("Second", "First!!1!"));
+        
+    }
+
+    public void addTestBlogs() {
+        this.persist(new Blog("First", "Hello World"));
+        this.persist(new Blog("Second", "First!!1!"));
     }
 
     public List<Blog> getBlogs() {
-        return blogs;
+        return this.listAll();
     }
 
+    @Transactional
     public void addBlog(Blog blog) {
-        blogs.add(blog);
+        this.persist(blog);
     }
 }

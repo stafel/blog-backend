@@ -8,28 +8,29 @@ import org.junit.jupiter.api.Test;
 import ch.hftm.Entities.Blog;
 import ch.hftm.Entities.BlogUser;
 import ch.hftm.Repositories.BlogRepository;
+import ch.hftm.Repositories.UserRepository;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
-public class BlogRepositoryTest {
+public class UserRepositoryTest {
     @Test
     public void testDataInit() {
-        BlogRepository br = new BlogRepository();
-        is(br.count() >= 2);
+        UserRepository ur = new UserRepository();
+        is(ur.count() >= 1);
     }
 
     @Test
     @Transactional
     public void testBlogCreation() {
-        BlogRepository br = new BlogRepository();
-        br.addBlog(new Blog(987654321L, "Testblog", "Testblog", new BlogUser("Toastuser321")));
+        UserRepository ur = new UserRepository();
+        ur.addUser(new BlogUser(67676767L, "Gigacado33"));
 
-        Blog checkBlog = br.findById(987654321L);
+        BlogUser checkUser = ur.findById(67676767L);
 
-        is(checkBlog.getAuthor().getNickname().equals("Toastuser321"));
+        is(checkUser.getNickname().equals("Gigacado33"));
 
-        br.delete(checkBlog);
+        ur.delete(checkUser);
     }
 }

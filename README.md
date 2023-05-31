@@ -47,4 +47,4 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
 - [x] Quarkus projekt aufgebaut mit /blog endpoint
 - [X] MariaDB container erstellt
 - [X] MariaDB container angebunden
-- [ ] Persistieren von Blogdateien
+- [X] Persistieren von Blogdateien

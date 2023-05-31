@@ -10,9 +10,41 @@ Projekt kann im Verzeichnis blog-backend  gestartet werden mit dem Befehl:
 ./mvnw quarkus:dev
 ```
 
-Auf der QUarkus-Konsole kann mit *r* das Testing gestartet werden.
+Auf der Quarkus-Konsole kann mit *r* das Testing gestartet werden.
+
+*Wichtig: um mit podman betrieben zu werden muss die DOCKER_HOST env gesetzt werden*
+
+Siehe [guide quarkus with podman](https://quarkus.io/guides/podman).
+
+```
+export DOCKER_HOST=unix:///run/user/1000/podman/podman.sock
+```
+
+*Wichtig: um mit einem MariaDB container betrieben zu werden muss die environment variable QUARKUS_DATASOURCE_PASSWORD gesetzt werden. Am einfachsten geht dies mit einem .env file im blog-backend directory*
+
+## Erstellen eines MariaDB containers auf Podman
+
+Erstellen einen mariadb containers.
+
+```
+podman run -d --name=backend-mariadb -p 9001:3306 -e MARIADB_USER=backend -e MARIADB_PASSWORD=<YourPassHere> -e MARIADB_ROOT_PASSWORD=<YourPassHere> mariadb:latest
+```
+
+Erstellen der Datenbank und vergeben der Rechte auf der podman-container-Konsole.
+
+```
+mysql -u root -p
+# Login with the root password here
+create database blog_backend;
+GRANT ALL PRIVILEGES ON blog_backend.* To backend;
+```
+
+*In einem produktiven system darf der backend user nicht vollprivilegien haben*
 
 # Stand
 
 - [x] Readme erstellen
 - [x] Quarkus projekt aufgebaut mit /blog endpoint
+- [X] MariaDB container erstellt
+- [X] MariaDB container angebunden
+- [ ] Persistieren von Blogdateien

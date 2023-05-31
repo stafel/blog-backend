@@ -1,16 +1,16 @@
-package ch.hftm;
+package ch.hftm.API;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/blog")
-public class BlogResource {
+@Path("/hello")
+public class GreetingResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String blog() {
-        return "Willkommen auf meinem Blog!";
+    public String hello() {
+        return "Hello from RESTEasy Reactive";
     }
 }

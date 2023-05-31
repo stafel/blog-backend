@@ -13,24 +13,29 @@ import ch.hftm.Repositories.UserRepository;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
+import jakarta.inject.Inject;
+
 @QuarkusTest
 public class UserRepositoryTest {
+
+    @Inject
+    UserRepository userRepository;
+
     @Test
     public void testDataInit() {
-        UserRepository ur = new UserRepository();
-        is(ur.count() >= 1);
+        is(userRepository.count() >= 1);
     }
 
     @Test
     @Transactional
     public void testBlogCreation() {
-        UserRepository ur = new UserRepository();
-        ur.addUser(new BlogUser(67676767L, "Gigacado33"));
+        BlogUser refUser = new BlogUser("Gigacado33");
+        userRepository.addUser(refUser);
 
-        BlogUser checkUser = ur.findById(67676767L);
+        BlogUser checkUser = userRepository.findById(refUser.getId());
 
         is(checkUser.getNickname().equals("Gigacado33"));
 
-        ur.delete(checkUser);
+        userRepository.delete(checkUser);
     }
 }

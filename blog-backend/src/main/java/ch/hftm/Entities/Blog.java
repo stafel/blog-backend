@@ -1,9 +1,11 @@
 package ch.hftm.Entities;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -13,7 +15,7 @@ public class Blog {
     String title;
     String content;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     BlogUser author;
 
     public Blog() {
@@ -55,5 +57,9 @@ public class Blog {
 
     public void setAuthor(BlogUser author) {
         this.author = author;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

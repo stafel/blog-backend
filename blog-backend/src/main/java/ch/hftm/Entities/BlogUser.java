@@ -32,4 +32,8 @@ public class BlogUser {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public Long getId() {
+        return id;
+    }
 }

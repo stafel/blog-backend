@@ -12,24 +12,30 @@ import ch.hftm.Repositories.BlogRepository;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
+import jakarta.inject.Inject;
+
 @QuarkusTest
 public class BlogRepositoryTest {
+
+    @Inject
+    BlogRepository blogRepository;
+
     @Test
     public void testDataInit() {
-        BlogRepository br = new BlogRepository();
-        is(br.count() >= 2);
+        is(blogRepository.count() >= 2);
     }
 
     @Test
     @Transactional
     public void testBlogCreation() {
-        BlogRepository br = new BlogRepository();
-        br.addBlog(new Blog(987654321L, "Testblog", "Testblog", new BlogUser("Toastuser321")));
+        Blog refBlog = new Blog("Testblog", "Testblog", new BlogUser("FireFox123"));
+        blogRepository.addBlog(refBlog);
 
-        Blog checkBlog = br.findById(987654321L);
+        Blog checkBlog = blogRepository.findById(refBlog.getId());
 
-        is(checkBlog.getAuthor().getNickname().equals("Toastuser321"));
+        is(checkBlog.getTitle().equals("Testblog"));
+        is(checkBlog.getAuthor().getNickname().equals("FireFox123"));
 
-        br.delete(checkBlog);
+        blogRepository.delete(checkBlog);
     }
 }

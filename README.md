@@ -48,5 +48,5 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
 - [X] MariaDB container erstellt
 - [X] MariaDB container angebunden
 - [X] Persistieren von Blogdateien
-- [ ] Blogposts abfragen per REST
+- [X] Blogposts abfragen per REST
 - [ ] Blogposts erstellen per REST

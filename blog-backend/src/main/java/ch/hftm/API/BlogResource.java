@@ -11,20 +11,21 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("blogs")
+@Path("blog")
 public class BlogResource {
 
     @Inject
     BlogRepository blogRepository;
 
     @GET
+    @Path("posts")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Blog> blogs() {
         return blogRepository.getBlogs();
     }
 
     @GET
-    @Path("{id}")
+    @Path("posts/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Blog blog(@PathParam("id") Long id) {
         return blogRepository.findById(id);

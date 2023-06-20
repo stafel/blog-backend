@@ -18,24 +18,24 @@ import jakarta.inject.Inject;
 public class PostRepositoryTest {
 
     @Inject
-    PostRepository blogRepository;
+    PostRepository postRepository;
 
     @Test
     public void testDataInit() {
-        is(blogRepository.count() >= 2);
+        is(postRepository.count() >= 2);
     }
 
     @Test
     @Transactional
     public void testBlogCreation() {
         Post refBlog = new Post("Testblog", "Testblog", new BlogUser("FireFox123"));
-        blogRepository.addBlog(refBlog);
+        postRepository.addPost(refBlog);
 
-        Post checkBlog = blogRepository.findById(refBlog.getId());
+        Post checkBlog = postRepository.findById(refBlog.getId());
 
         is(checkBlog.getTitle().equals("Testblog"));
         is(checkBlog.getAuthor().getNickname().equals("FireFox123"));
 
-        blogRepository.delete(checkBlog);
+        postRepository.delete(checkBlog);
     }
 }

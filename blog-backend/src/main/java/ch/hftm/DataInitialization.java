@@ -25,7 +25,7 @@ public class DataInitialization {
         }
 
         if (blogRepository.listAll().isEmpty()) {
-            blogRepository.addTestBlogs();
+            blogRepository.addTestPosts();
         }
     }
 }

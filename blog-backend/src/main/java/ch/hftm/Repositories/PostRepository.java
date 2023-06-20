@@ -20,17 +20,25 @@ public class PostRepository implements PanacheRepository<Post> {
     }
 
     @Transactional
-    public void addTestBlogs() {
+    public void addTestPosts() {
         this.persist(new Post("First", "Hello World", userRepository.getTestUser()));
         this.persist(new Post("Second", "First!!1!", userRepository.getTestUser()));
     }
 
-    public List<Post> getBlogs() {
+    public List<Post> getPosts() {
         return this.listAll();
     }
 
     @Transactional
-    public void addBlog(Post blog) {
-        this.persist(blog);
+    public void addPost(Post post) {
+        if (post.getAuthor().getId() == null) {
+            post.setAuthor(userRepository.find("nickname", post.getAuthor().getNickname()).firstResult()); // fixes json inputs 
+        }
+        this.persist(post);
+    }
+
+    @Transactional
+    public void deletePost(Long id) {
+        this.deleteById(id);
     }
 }

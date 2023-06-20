@@ -48,5 +48,5 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
 - [X] MariaDB container erstellt
 - [X] MariaDB container angebunden
 - [X] Persistieren von Blogdateien
-- [X] Blogposts abfragen per REST
-- [ ] Blogposts erstellen per REST
+- [X] Blogposts abfragen, erstellen, löschen per REST
+- [ ] Bug DB wird neu erstellt bei jedem Start und löscht bestehende Daten

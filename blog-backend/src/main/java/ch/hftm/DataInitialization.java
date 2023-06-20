@@ -1,6 +1,6 @@
 package ch.hftm;
 
-import ch.hftm.Repositories.BlogRepository;
+import ch.hftm.Repositories.PostRepository;
 import ch.hftm.Repositories.UserRepository;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,7 +15,7 @@ public class DataInitialization {
     UserRepository userRepository;
 
     @Inject
-    BlogRepository blogRepository;
+    PostRepository blogRepository;
 
     @Transactional
     public void init(@Observes StartupEvent event) {
@@ -25,7 +25,7 @@ public class DataInitialization {
         }
 
         if (blogRepository.listAll().isEmpty()) {
-            blogRepository.addTestBlogs();
+            blogRepository.addTestPosts();
         }
     }
 }

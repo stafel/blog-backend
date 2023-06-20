@@ -5,9 +5,9 @@ import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 
-import ch.hftm.Entities.Blog;
+import ch.hftm.Entities.Post;
 import ch.hftm.Entities.BlogUser;
-import ch.hftm.Repositories.BlogRepository;
+import ch.hftm.Repositories.PostRepository;
 import ch.hftm.Repositories.UserRepository;
 
 import static io.restassured.RestAssured.given;

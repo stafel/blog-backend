@@ -1,16 +1,28 @@
 package ch.hftm.API;
 
+import java.util.List;
+
+import ch.hftm.Entities.Post;
+import ch.hftm.Repositories.PostRepository;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-@Path("/blog")
+/**
+ * Main entry point for the blog
+ * Will hand off requests to corresponding Subresource Locators
+ */
+@Path("blog")
 public class BlogResource {
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String blog() {
-        return "Willkommen auf meinem Blog!";
+    @Inject
+    PostResource postResource;
+
+    @Path("posts")
+    public Object posts() {
+        return postResource;
     }
 }

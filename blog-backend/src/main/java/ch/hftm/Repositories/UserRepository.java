@@ -3,7 +3,7 @@ package ch.hftm.Repositories;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.hftm.Entities.Blog;
+import ch.hftm.Entities.Post;
 import ch.hftm.Entities.BlogUser;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;

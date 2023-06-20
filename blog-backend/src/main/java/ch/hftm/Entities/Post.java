@@ -9,7 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Blog {
+public class Post {
     @Id @GeneratedValue
     private Long id;
     String title;
@@ -18,17 +18,17 @@ public class Blog {
     @ManyToOne(cascade = CascadeType.MERGE)
     BlogUser author;
 
-    public Blog() {
+    public Post() {
 
     }
 
-    public Blog(String title, String content, BlogUser author) {
+    public Post(String title, String content, BlogUser author) {
         this.title = title;
         this.content = content;
         this.author = author;
     }
 
-    public Blog(Long id, String title, String content, BlogUser author) {
+    public Post(Long id, String title, String content, BlogUser author) {
         this.id = id;
         this.title = title;
         this.content = content;

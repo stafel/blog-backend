@@ -5,9 +5,9 @@ import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 
-import ch.hftm.Entities.Blog;
+import ch.hftm.Entities.Post;
 import ch.hftm.Entities.BlogUser;
-import ch.hftm.Repositories.BlogRepository;
+import ch.hftm.Repositories.PostRepository;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
@@ -15,10 +15,10 @@ import static org.hamcrest.CoreMatchers.is;
 import jakarta.inject.Inject;
 
 @QuarkusTest
-public class BlogRepositoryTest {
+public class PostRepositoryTest {
 
     @Inject
-    BlogRepository blogRepository;
+    PostRepository blogRepository;
 
     @Test
     public void testDataInit() {
@@ -28,10 +28,10 @@ public class BlogRepositoryTest {
     @Test
     @Transactional
     public void testBlogCreation() {
-        Blog refBlog = new Blog("Testblog", "Testblog", new BlogUser("FireFox123"));
+        Post refBlog = new Post("Testblog", "Testblog", new BlogUser("FireFox123"));
         blogRepository.addBlog(refBlog);
 
-        Blog checkBlog = blogRepository.findById(refBlog.getId());
+        Post checkBlog = blogRepository.findById(refBlog.getId());
 
         is(checkBlog.getTitle().equals("Testblog"));
         is(checkBlog.getAuthor().getNickname().equals("FireFox123"));

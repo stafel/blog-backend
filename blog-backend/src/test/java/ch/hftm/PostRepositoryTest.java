@@ -12,6 +12,8 @@ import ch.hftm.Repositories.PostRepository;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
+import java.util.Date;
+
 import jakarta.inject.Inject;
 
 @QuarkusTest
@@ -28,7 +30,7 @@ public class PostRepositoryTest {
     @Test
     @Transactional
     public void testBlogCreation() {
-        Post refBlog = new Post("Testblog", "Testblog", new BlogUser("FireFox123"));
+        Post refBlog = new Post("Testblog", "Testblog", new Date(System.currentTimeMillis()), new BlogUser("FireFox123"));
         postRepository.addPost(refBlog);
 
         Post checkBlog = postRepository.findById(refBlog.getId());

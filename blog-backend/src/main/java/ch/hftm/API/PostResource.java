@@ -22,6 +22,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 */
 
 @ApplicationScoped
+@Path("blog/posts")
 public class PostResource {
 
     @Inject

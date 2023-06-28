@@ -1,6 +1,8 @@
 package ch.hftm.Repositories;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import ch.hftm.Entities.Post;
@@ -21,8 +23,8 @@ public class PostRepository implements PanacheRepository<Post> {
 
     @Transactional
     public void addTestPosts() {
-        this.persist(new Post("First", "Hello World", userRepository.getTestUser()));
-        this.persist(new Post("Second", "First!!1!", userRepository.getTestUser()));
+        this.persist(new Post("First", "Hello World", new Date(System.currentTimeMillis()),userRepository.getTestUser()));
+        this.persist(new Post("Second", "First!!1!", new Date(System.currentTimeMillis()), userRepository.getTestUser()));
     }
 
     public List<Post> getPosts() {

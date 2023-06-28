@@ -1,9 +1,6 @@
 package ch.hftm.Entities;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
@@ -12,42 +9,32 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
 
+/**
+ * Top level of the full blog
+ * Contains the name, short description (mission statement) and the logo used for the blog
+ * Links will point to all available subresources
+ */
 @Entity
-public class BlogUser {
+public class Blog {
     @Id @GeneratedValue
     private Long id;
 
-    String nickname;
+    String name;
     String description;
-    Date signupDate;
+    String logoUrl;
 
     @Transient
     List<Link> links; // actions for HATEOAS not to be saved in db
 
-    public BlogUser() {
-        this.links = new ArrayList<>();
-    }
-
-    public BlogUser(String nickname) {
-        this.nickname = nickname;
-        this.signupDate = new Date(System.currentTimeMillis());
-        this.links = new ArrayList<>();
-    }
-
-    public BlogUser(Long id, String nickname, String description, Date signupDate) {
-        this.id = id;
-        this.nickname = nickname;
+    public Blog(String name, String description, String logoUrl) {
+        this.name = name;
         this.description = description;
-        this.signupDate = signupDate;
+        this.logoUrl = logoUrl;
         this.links = new ArrayList<>();
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public Blog() {
+        this.links = new ArrayList<>();
     }
 
     public Long getId() {
@@ -58,6 +45,14 @@ public class BlogUser {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -66,12 +61,12 @@ public class BlogUser {
         this.description = description;
     }
 
-    public Date getSignupDate() {
-        return signupDate;
+    public String getLogoUrl() {
+        return logoUrl;
     }
 
-    public void setSignupDate(Date signupDate) {
-        this.signupDate = signupDate;
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
     }
 
     public List<Link> getLinks() {

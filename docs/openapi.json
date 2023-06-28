@@ -444,6 +444,10 @@
             "nullable": false,
             "type": "string"
           },
+          "author": {
+            "nullable": false,
+            "$ref": "#/components/schemas/user"
+          },
           "links": {
             "nullable": false,
             "type": "array",
@@ -500,10 +504,6 @@
             "items": {
               "$ref": "#/components/schemas/link"
             }
-          },
-          "author": {
-            "nullable": false,
-            "$ref": "#/components/schemas/user"
           }
         }
       },

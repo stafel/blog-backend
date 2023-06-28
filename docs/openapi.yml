@@ -1,0 +1,331 @@
+openapi: 3.0.0
+info:
+  version: '1'
+  title: ''
+  description: ''
+paths:
+  /blog:
+    get:
+      operationId: get-blog
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/blog'
+    put:
+      operationId: put-blog
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/blog'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+  /blog/posts:
+    get:
+      operationId: get-posts
+      description: ''
+      parameters:
+        - in: query
+          name: from
+          schema:
+            type: string
+        - in: query
+          name: to
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/post'
+        '404':
+          description: no posts in this date range
+          content:
+            application/json:
+              schema:
+                type: string
+    post:
+      operationId: post-post
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+  /blog/posts/{id}:
+    get:
+      operationId: get-post
+      description: ''
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/post'
+        '404':
+          description: no post with this id exists
+          content:
+            application/json:
+              schema:
+                type: string
+    put:
+      operationId: put-post
+      description: ''
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+    delete:
+      operationId: delete-post
+      description: ''
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: no post with id found
+          content:
+            application/json:
+              schema:
+                type: string
+  /blog/users:
+    get:
+      operationId: get-users
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user'
+    put:
+      operationId: put-user
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+    post:
+      operationId: post-user
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+        '409':
+          description: user already exists
+          content:
+            application/json:
+              schema:
+                type: string
+  /blog/users/me:
+    get:
+      operationId: get-user-self
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: string
+  /blog/user/{id}:
+    get:
+      operationId: get-user
+      description: ''
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '404':
+          description: user with id not found
+          content:
+            application/json:
+              schema:
+                type: string
+  /blog/users/{id}:
+    delete:
+      operationId: delete-user
+      description: ''
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: user with id not found
+          content:
+            application/json:
+              schema:
+                type: string
+components:
+  securitySchemes: {}
+  schemas:
+    post:
+      properties:
+        id:
+          nullable: false
+          type: integer
+        title:
+          nullable: false
+          type: string
+        content:
+          nullable: false
+          type: string
+        creationDate:
+          nullable: false
+          type: string
+        author:
+          nullable: false
+          $ref: '#/components/schemas/user'
+        links:
+          nullable: false
+          type: array
+          items:
+            $ref: '#/components/schemas/link'
+    user:
+      properties:
+        id:
+          nullable: false
+          type: integer
+        nickname:
+          nullable: false
+          type: string
+        description:
+          nullable: false
+          type: string
+        signupDate:
+          nullable: false
+          type: string
+        links:
+          nullable: false
+          type: array
+          items:
+            $ref: '#/components/schemas/link'
+    blog:
+      properties:
+        name:
+          nullable: false
+          type: string
+        description:
+          nullable: false
+          type: string
+        logoUrl:
+          nullable: false
+          type: string
+        links:
+          nullable: false
+          type: array
+          items:
+            $ref: '#/components/schemas/link'
+    link:
+      properties:
+        href:
+          nullable: false
+          type: string
+        rel:
+          nullable: false
+          type: string
+        type:
+          nullable: false
+          type: string

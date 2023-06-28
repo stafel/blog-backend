@@ -54,5 +54,5 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
   - [X] PUT Request zum updaten von blog, post, user
   - [X] Query-Parameter zur filterung von posts
   - [X] Fehler-Responses beim Versuch eine nicht vorhandene Resource zu löschen
-  - [X] Linking nach RFC5988
+  - [X] Linking nach [RFC5988](https://datatracker.ietf.org/doc/html/rfc5988) for [HATEOAS](https://restfulapi.net/hateoas/)
 - [ ] OpenAPI spec umgesetzt

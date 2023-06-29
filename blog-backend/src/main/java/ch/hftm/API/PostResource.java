@@ -1,10 +1,13 @@
 package ch.hftm.API;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import ch.hftm.Entities.Post;
 import ch.hftm.Repositories.PostRepository;
+import io.vertx.ext.web.handler.HttpException;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -33,14 +36,45 @@ public class PostResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Post> listPosts(@QueryParam("from") Date from, @QueryParam("to") Date to) {
-        if (from == null) {
-            from = new Date(0L);
+    public List<Post> listPosts(@QueryParam("from") String from, @QueryParam("to") String to) {
+
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+        Date fromDate = new Date(0L);
+        Date toDate = new Date(System.currentTimeMillis()+86400000L);
+
+        if (from != "") {
+            try {
+                fromDate = parser.parse(from);
+            } catch (Exception e) {
+                // done: handle exception
+            }
         }
-        if (to == null) {
-            to = new Date(System.currentTimeMillis());
+        if (to != "") {
+            try {
+                toDate = parser.parse(to);
+
+                // Fix date to include all posts of current day
+                // TODO: refactor completely in a sane way like fastAPI
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(toDate);
+                cal.add(Calendar.DATE, 1);
+                toDate = cal.getTime();
+            } catch (Exception e) {
+                // done: handle exception
+            }
         }
-        return postRepository.getPosts(from, to);
+
+        List<Post> posts = postRepository.getPosts(fromDate, toDate);
+
+        System.out.println(fromDate);
+        System.out.println(toDate);
+        System.out.println(posts);
+
+        if (posts.size() < 1) {
+            throw new HttpException(404, "No post found in this date range");
+        }
+
+        return posts;
     }
 
     @GET

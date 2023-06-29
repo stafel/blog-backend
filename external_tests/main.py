@@ -1,7 +1,7 @@
-import re
 import unittest
 import requests
 import json
+import datetime
 
 HEADERS = {
     "Content-Type": "application/json",
@@ -39,9 +39,21 @@ class TestPosts(unittest.TestCase):
 
     def setUp(self) -> None:
         self.post_url = BASE_URL + "blog/posts"
+        self.first_date = f"{datetime.datetime(1990, 1, 1):%Y-%m-%d}"
+        self.current_date = f"{datetime.datetime.utcnow():%Y-%m-%d}"
 
     def test_get_list(self):
         ret = requests.get(self.post_url)
+
+        self.assertEqual(200, ret.status_code)
+
+    def test_get_filtered_list_empty(self):
+        ret = requests.get(self.post_url, params={"from": self.first_date, "to": self.first_date})
+
+        self.assertEqual(404, ret.status_code)
+
+    def test_get_filtered_list_filled(self):
+        ret = requests.get(self.post_url, params={"from": self.first_date, "to": self.current_date})
 
         self.assertEqual(200, ret.status_code)
 

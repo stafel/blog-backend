@@ -9,6 +9,7 @@ import ch.hftm.Repositories.BlogRepository;
 import ch.hftm.Repositories.PostRepository;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -32,11 +33,25 @@ public class BlogResource {
     @Inject
     PostResource postResource;
 
+    @Inject
+    BlogUserResource userResource;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Blog getBlog() {
         Blog blog = blogRepository.getBlog();
 
+        // possibility to update this blog
+        blog.addLink(
+            new Link(
+                uriInfo,
+                BlogResource.class,
+                "blog",
+                "PUT"
+                )
+        );
+
+        // possibility to read some posts
         blog.addLink(
             new Link(
                 uriInfo,
@@ -46,11 +61,31 @@ public class BlogResource {
                 )
         );
 
+        // possibility to read some users
+        blog.addLink(
+            new Link(
+                uriInfo,
+                BlogUserResource.class,
+                "users",
+                "GET"
+                )
+        );
+
         return blog;
+    }
+
+    @PUT
+    public void updateBlog(Blog blog) {
+        blogRepository.updateBlog(blog);
     }
 
     @Path("posts")
     public Object posts() {
         return postResource;
+    }
+
+    @Path("users")
+    public Object users() {
+        return userResource;
     }
 }

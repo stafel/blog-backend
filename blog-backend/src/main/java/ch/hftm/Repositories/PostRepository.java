@@ -43,4 +43,14 @@ public class PostRepository implements PanacheRepository<Post> {
     public void deletePost(Long id) {
         this.deleteById(id);
     }
+
+    @Transactional
+    public void updatePost(Post post) {
+        Post originalPost = this.findById(post.getId());
+        originalPost.setContent(post.getContent());
+        originalPost.setTitle(post.getTitle());
+        originalPost.setCreationDate(post.getCreationDate());
+        originalPost.setAuthor(post.getAuthor());
+        post = originalPost;
+    }
 }

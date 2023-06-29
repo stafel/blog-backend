@@ -50,7 +50,7 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
 - [X] Persistieren von Blogdateien
 - [X] Blogposts abfragen, erstellen, löschen per REST
 - [ ] Bug DB wird neu erstellt bei jedem Start und löscht bestehende Daten
-- [X] [OpenAPI spec](/docs/openapi.json)
+- [X] [OpenAPI spec](/docs/openapi.json) view [in the swagger editor](https://editor.swagger.io/)
   - [X] PUT Request zum updaten von blog, post, user
   - [X] Query-Parameter zur filterung von posts
   - [X] Fehler-Responses beim Versuch eine nicht vorhandene Resource zu löschen

@@ -48,8 +48,8 @@ public class PostRepository implements PanacheRepository<Post> {
     }
 
     @Transactional
-    public void deletePost(Long id) {
-        this.deleteById(id);
+    public boolean deletePost(Long id) {
+        return this.deleteById(id);
     }
 
     @Transactional

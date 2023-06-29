@@ -34,8 +34,8 @@ public class UserRepository implements PanacheRepository<BlogUser> {
     }
 
     @Transactional
-    public void deleteUser(Long id) {
-        this.deleteById(id);
+    public boolean deleteUser(Long id) {
+        return this.deleteById(id);
     }
 
     @Transactional

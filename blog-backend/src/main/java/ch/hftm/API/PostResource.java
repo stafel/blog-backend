@@ -93,7 +93,9 @@ public class PostResource {
     @DELETE
     @Path("{id}")
     public void deletePost(@PathParam("id") Long id) {
-       postRepository.deletePost(id);
+       if (!postRepository.deletePost(id)) {
+            throw new HttpException(400, "No post found with this id");
+       }
     }
 
     @PUT

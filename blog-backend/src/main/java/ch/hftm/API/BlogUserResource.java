@@ -6,6 +6,7 @@ import ch.hftm.Entities.BlogUser;
 import ch.hftm.Entities.Post;
 import ch.hftm.Repositories.PostRepository;
 import ch.hftm.Repositories.UserRepository;
+import io.vertx.ext.web.handler.HttpException;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -44,6 +45,13 @@ public class BlogUserResource {
         return userRepository.findById(id);
     }
 
+    @GET
+    @Path("me")
+    @Produces(MediaType.APPLICATION_JSON)
+    public BlogUser getUserSelf() {
+        return userRepository.getTestUser(); // TODO: fix for current user with auth token
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void createUser(BlogUser user) {
@@ -53,7 +61,9 @@ public class BlogUserResource {
     @DELETE
     @Path("{id}")
     public void deleteUser(@PathParam("id") Long id) {
-       userRepository.deleteUser(id);
+       if (!userRepository.deleteUser(id)) {
+            throw new HttpException(400, "No user found with this id");
+       }
     }
 
     @PUT

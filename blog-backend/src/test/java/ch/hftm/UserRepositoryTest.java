@@ -12,6 +12,7 @@ import ch.hftm.Repositories.UserRepository;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import jakarta.inject.Inject;
 
@@ -34,7 +35,7 @@ public class UserRepositoryTest {
 
         BlogUser checkUser = userRepository.findById(refUser.getId());
 
-        is(checkUser.getNickname().equals("Gigacado33"));
+        assertThat("Gigacado33", is(checkUser.getNickname()));
 
         userRepository.delete(checkUser);
     }

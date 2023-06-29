@@ -3,7 +3,11 @@ package ch.hftm.Repositories;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.hibernate.query.Query;
 
 import ch.hftm.Entities.Post;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,8 +31,12 @@ public class PostRepository implements PanacheRepository<Post> {
         this.persist(new Post("Second", "First!!1!", new Date(System.currentTimeMillis()), userRepository.getTestUser()));
     }
 
-    public List<Post> getPosts() {
-        return this.listAll();
+    public List<Post> getPosts(Date from, Date to) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("from", from);
+        params.put("to", to);
+
+        return this.list("creationDate>= :from and creationDate<= :to", params);
     }
 
     @Transactional

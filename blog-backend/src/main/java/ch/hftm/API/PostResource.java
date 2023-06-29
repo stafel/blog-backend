@@ -1,5 +1,6 @@
 package ch.hftm.API;
 
+import java.util.Date;
 import java.util.List;
 
 import ch.hftm.Entities.Post;
@@ -13,6 +14,7 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,8 +33,14 @@ public class PostResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Post> listPosts() {
-        return postRepository.getPosts();
+    public List<Post> listPosts(@QueryParam("from") Date from, @QueryParam("to") Date to) {
+        if (from == null) {
+            from = new Date(0L);
+        }
+        if (to == null) {
+            to = new Date(System.currentTimeMillis());
+        }
+        return postRepository.getPosts(from, to);
     }
 
     @GET

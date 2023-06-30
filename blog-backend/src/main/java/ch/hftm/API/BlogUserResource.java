@@ -1,13 +1,17 @@
 package ch.hftm.API;
 
 import java.util.List;
+import java.util.Set;
 
+import ch.hftm.Entities.Blog;
 import ch.hftm.Entities.BlogUser;
 import ch.hftm.Entities.Post;
 import ch.hftm.Repositories.PostRepository;
 import ch.hftm.Repositories.UserRepository;
 import io.vertx.ext.web.handler.HttpException;
 import jakarta.inject.Inject;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -32,6 +36,9 @@ public class BlogUserResource {
     @Inject
     UserRepository userRepository;
 
+    @Inject
+    Validator validator;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<BlogUser> listUsers() {
@@ -52,9 +59,17 @@ public class BlogUserResource {
         return userRepository.getTestUser(); // TODO: fix for current user with auth token
     }
 
+    private void validOrThrow(BlogUser user) {
+        Set<ConstraintViolation<BlogUser>> violations = validator.validate(user);
+        if (!violations.isEmpty()) {
+            throw new HttpException(400, violations.stream().toString());
+        }
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void createUser(BlogUser user) {
+        validOrThrow(user);
         userRepository.addUser(user);
     }
 
@@ -68,6 +83,7 @@ public class BlogUserResource {
 
     @PUT
     public void updateUser(BlogUser user) {
+        validOrThrow(user);
         userRepository.updateUser(user);
     }
 }

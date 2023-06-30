@@ -12,11 +12,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Post {
     @Id @GeneratedValue
     private Long id;
+
+    @NotBlank(message="Title may not be blank")
     String title;
     String content;
     Date creationDate;

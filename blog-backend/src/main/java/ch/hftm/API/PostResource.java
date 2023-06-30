@@ -4,11 +4,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import ch.hftm.Entities.BlogUser;
 import ch.hftm.Entities.Post;
 import ch.hftm.Repositories.PostRepository;
 import io.vertx.ext.web.handler.HttpException;
 import jakarta.inject.Inject;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -33,6 +37,9 @@ public class PostResource {
 
     @Inject
     PostRepository postRepository;
+
+    @Inject
+    Validator validator;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -84,9 +91,17 @@ public class PostResource {
         return postRepository.findById(id);
     }
 
+    private void validOrThrow(Post post) {
+        Set<ConstraintViolation<Post>> violations = validator.validate(post);
+        if (!violations.isEmpty()) {
+            throw new HttpException(400, violations.stream().toString());
+        }
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void createPost(Post post) {
+        validOrThrow(post);
         postRepository.addPost(post);
     }
 
@@ -100,6 +115,7 @@ public class PostResource {
 
     @PUT
     public void updatePost(Post post) {
+        validOrThrow(post);
         postRepository.updatePost(post);
     }
 }

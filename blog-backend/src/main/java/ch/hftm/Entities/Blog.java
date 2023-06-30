@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * Top level of the full blog
@@ -19,6 +20,7 @@ public class Blog {
     @Id @GeneratedValue
     private Long id;
 
+    @NotBlank(message="Name may not be blank")
     String name;
     String description;
     String logoUrl;

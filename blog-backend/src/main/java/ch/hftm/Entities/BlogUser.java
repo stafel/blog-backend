@@ -11,12 +11,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class BlogUser {
     @Id @GeneratedValue
     private Long id;
 
+    @NotBlank(message="Nickname may not be blank")
     String nickname;
     String description;
     Date signupDate;

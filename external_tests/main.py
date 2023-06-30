@@ -35,6 +35,18 @@ class TestBlog(unittest.TestCase):
 
         self.assertEqual("Superduper", json.loads(ret.content)["name"])
 
+    def test_put_emtpyname(self):
+        # an empty blog name should be rejected
+        blog_data = {
+            "name": "",
+            "description": "Lol how nice",
+            "logoUrl": ""
+        }
+
+        ret = requests.put(self.blog_url, data=json.dumps(blog_data), headers=HEADERS)
+
+        self.assertEqual(400, ret.status_code)
+
 class TestPosts(unittest.TestCase):
 
     def setUp(self) -> None:

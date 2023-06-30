@@ -1,13 +1,17 @@
 package ch.hftm.API;
 
 import java.util.List;
+import java.util.Set;
 
 import ch.hftm.Entities.Blog;
 import ch.hftm.Entities.Post;
 import ch.hftm.Entities.Link;
 import ch.hftm.Repositories.BlogRepository;
 import ch.hftm.Repositories.PostRepository;
+import io.vertx.ext.web.handler.HttpException;
 import jakarta.inject.Inject;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
@@ -35,6 +39,9 @@ public class BlogResource {
 
     @Inject
     BlogUserResource userResource;
+
+    @Inject
+    Validator validator;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -76,6 +83,10 @@ public class BlogResource {
 
     @PUT
     public void updateBlog(Blog blog) {
+        Set<ConstraintViolation<Blog>> violations = validator.validate(blog);
+        if (!violations.isEmpty()) {
+            throw new HttpException(400, violations.stream().toString());
+        }
         blogRepository.updateBlog(blog);
     }
 

@@ -56,3 +56,7 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
   - [X] Fehler-Responses beim Versuch eine nicht vorhandene Resource zu löschen
   - [X] Linking nach [RFC5988](https://datatracker.ietf.org/doc/html/rfc5988) for [HATEOAS](https://restfulapi.net/hateoas/)
 - [ ] OpenAPI spec umgesetzt
+  -[X] PUT request
+  -[X] Query params
+  -[X] Fehler response
+  -[ ] Links

@@ -60,3 +60,4 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
   -[X] Query params
   -[X] Fehler response
   -[ ] Links
+- [ ] Blog kommentar als DTO

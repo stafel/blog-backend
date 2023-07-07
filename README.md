@@ -61,3 +61,6 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
   -[X] Fehler response
   -[ ] Links
 - [ ] Blog kommentar als DTO
+  - [ ] API get, post
+  - [ ] Persistenz
+  - [ ] Dokumentiert

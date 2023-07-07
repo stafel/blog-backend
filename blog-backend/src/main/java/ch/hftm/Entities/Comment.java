@@ -78,10 +78,6 @@ public class Comment {
         return author;
     }
 
-    public void setAuthor(BlogUser author) {
-        this.author = author;
-    }
-
     public void addLink(Link link) {
         this.links.add(link);
     }
@@ -98,6 +94,10 @@ public class Comment {
         return links;
     }
 
+    public void setAuthor(BlogUser author) {
+        this.author = author;
+    }
+    
     public void setLinks(List<Link> links) {
         this.links = links;
     }

@@ -12,6 +12,7 @@ import org.hibernate.query.Query;
 import ch.hftm.Entities.BlogUser;
 import ch.hftm.Entities.Comment;
 import ch.hftm.Entities.Post;
+import ch.hftm.Entities.Comment;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;

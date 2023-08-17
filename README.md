@@ -61,6 +61,35 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
   -[X] Fehler response
   -[ ] Links
 - [ ] Blog kommentar als DTO
-  - [ ] API get, post
+  - [X] API get, post
   - [ ] Persistenz
   - [ ] Dokumentiert
+  
+# Berechtigungskonzept
+
+## Rollen
+
+- Admin: Kann alle Blogposts und Kommentare löschen. Kann die Blog-Metadaten editieren. Kann User erstellen und löschen.
+- Author: Kann Blogposts verfassen. Kann eigene Blogposts editieren und löschen.
+- User: Kann Kommentare zu einem Blogpost erfassen. Kann eigene Kommentare editieren und löschen. Kann eigene Userdaten editieren und sich selbst löschen.
+
+## Endpoints
+
+- /blog
+  - POST: Admin-Rolle
+- /blog/posts
+  - POST: Author-Rolle
+- /blog/posts/{id}
+  - PUT: Author-Rolle und Author stimmen überrein
+  - DELETE: Author-Rolle und Author stimmen überrein oder Admin-Rolle
+- /blog/posts/{id}/comments
+  - POST: User-Rolle
+- /blog/posts/{id}/comments/{id}
+  - PUT: User-Rolle und User stimmen überrein
+  - DELETE: User-Rolle und User stimmen überrein oder Admin-Rolle
+- /blog/users
+  - POST: Admin-Rolle
+- /blog/users/{id}
+  - PUT: User-Rolle und User stimmt überein
+  - DELETE: User-Rolle und User stimmt überein oder Admin-Rolle
+

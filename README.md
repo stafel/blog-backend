@@ -76,20 +76,27 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
 ## Endpoints
 
 - /blog
+  - GET: Offen
   - POST: Admin-Rolle
 - /blog/posts
+  - GET: Offen
   - POST: Author-Rolle
 - /blog/posts/{id}
+  - GET: Offen
   - PUT: Author-Rolle und Author stimmen überrein
   - DELETE: Author-Rolle und Author stimmen überrein oder Admin-Rolle
 - /blog/posts/{id}/comments
+  - GET: Offen
   - POST: User-Rolle
 - /blog/posts/{id}/comments/{id}
+  - GET: Offen
   - PUT: User-Rolle und User stimmen überrein
   - DELETE: User-Rolle und User stimmen überrein oder Admin-Rolle
 - /blog/users
+  - GET: Offen
   - POST: Admin-Rolle
 - /blog/users/{id}
+  - GET: Offen
   - PUT: User-Rolle und User stimmt überein
   - DELETE: User-Rolle und User stimmt überein oder Admin-Rolle
 

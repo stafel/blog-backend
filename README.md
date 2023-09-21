@@ -64,6 +64,10 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
   - [X] API get, post
   - [ ] Persistenz
   - [ ] Dokumentiert
+- [ ] Containerisierung
+  - [X] Containerisieren
+  - [X] Publish
+  - [ ] Dokumentation Keycloak
   
 # Berechtigungskonzept
 
@@ -100,3 +104,33 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
   - PUT: User-Rolle und User stimmt überein
   - DELETE: User-Rolle und User stimmt überein oder Admin-Rolle
 
+# Container-Image Build, Package and Publish
+
+Alle Befehle im Verzeichnis *blog-Backend* ausführen.
+
+Erstellen der Artefakte in src/target mit Befehl
+
+```
+./mvnw package
+```
+
+Erstellen des container images via podman mit
+
+```
+podman build -f src/main/docker/Dockerfile.jvm -t ghcr.io/stafel/blog-backend:latest .
+```
+
+Optional falls nicht bereits getan: Login auf ghcr.io per
+
+```
+podman login ghcr.io -u stafel
+```
+
+
+Pushen nach ghcr.io mit
+
+```
+podman push ghcr.io/stafel/blog-backend:latest
+```
+
+Package sollte nun unter dem blog-backend repository in github verfügbar sein.

@@ -22,12 +22,20 @@ export DOCKER_HOST=unix:///run/user/1000/podman/podman.sock
 
 *Wichtig: um mit einem MariaDB container betrieben zu werden muss die environment variable QUARKUS_DATASOURCE_PASSWORD gesetzt werden. Am einfachsten geht dies mit einem .env file im blog-backend directory*
 
-## Erstellen eines MariaDB containers auf Podman
+## Einrichten der Hilfs-Cotainer
+
+Erstellen des Netzwerks
+
+```
+podman network create blog-nw
+```
+
+### Erstellen eines MariaDB containers auf Podman
 
 Erstellen einen mariadb containers.
 
 ```
-podman run -d --name=backend-mariadb -p 9001:3306 -e MARIADB_USER=backend -e MARIADB_PASSWORD=<YourPassHere> -e MARIADB_ROOT_PASSWORD=<YourPassHere> mariadb:latest
+podman run -d --name=backend-mariadb -p 9001:3306 --network blog-nw -e MARIADB_USER=backend -e MARIADB_PASSWORD=<YourPassHere> -e MARIADB_ROOT_PASSWORD=<YourPassHere> mariadb:latest
 ```
 
 Erstellen der Datenbank und vergeben der Rechte auf der podman-container-Konsole.
@@ -40,6 +48,10 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
 ```
 
 *In einem produktiven system darf der backend user nicht vollprivilegien haben*
+
+### Erstellen eines Keycloak containers auf Podman
+
+
 
 # Stand
 

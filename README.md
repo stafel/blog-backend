@@ -51,7 +51,11 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
 
 ### Erstellen eines Keycloak containers auf Podman
 
+Starten des Keycloak containers
 
+```
+podman run -d --name blog-keycloak -p 8080:8080 --network blog-nw -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=super$ecret1! quay.io/keycloak/keycloak:latest start-dev
+```
 
 # Stand
 

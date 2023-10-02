@@ -49,6 +49,12 @@ GRANT ALL PRIVILEGES ON blog_backend.* To backend;
 
 *In einem produktiven system darf der backend user nicht vollprivilegien haben*
 
+### Erstellen eines MySQL containers auf Podman
+
+TODO 
+https://moodle.hftm.ch/mod/page/view.php?id=206192
+https://quarkus.io/guides/datasource
+
 ### Erstellen eines Keycloak containers auf Podman
 
 Starten des Keycloak containers
@@ -84,6 +90,10 @@ podman run -d --name blog-keycloak -p 8080:8080 --network blog-nw -e KEYCLOAK_AD
   - [X] Containerisieren
   - [X] Publish
   - [ ] Dokumentation Keycloak
+- [ ] MySQL db
+  - [ ] Migrationsfile
+  - [ ] MySQL container
+  - [ ] Publish
   
 # Berechtigungskonzept
 

@@ -91,7 +91,8 @@ podman run -d --name blog-keycloak -p 8080:8080 --network blog-nw -e KEYCLOAK_AD
   - [X] Publish
   - [ ] Dokumentation Keycloak
 - [ ] MySQL db
-  - [ ] Migrationsfile
+  - [X] Dependencies
+  - [X] Migrationsfile
   - [ ] MySQL container
   - [ ] Publish
   

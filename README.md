@@ -41,9 +41,10 @@ podman run -d --name=backend-mariadb -p 9001:3306 --network blog-nw -e MARIADB_U
 Erstellen der Datenbank und vergeben der Rechte auf der podman-container-Konsole.
 
 ```
-mysql -u root -p
+mariadb -u root -p
 # Login with the root password here
 create database blog_backend;
+create user backend@blog_backend identified by '<YourPassHere>';
 GRANT ALL PRIVILEGES ON blog_backend.* To backend;
 ```
 

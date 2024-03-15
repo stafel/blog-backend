@@ -19,3 +19,9 @@ scrape_configs:
 
     static_configs:
       - targets: ['host.containers.internal:9111']
+
+remote_write:
+- url: http://host.containers.internal:3500
+  basic_auth:
+    username: prometheus
+    password: <Your Grafana.com API Key>

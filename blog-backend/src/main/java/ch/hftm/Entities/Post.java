@@ -19,6 +19,8 @@ public class Post {
     @Id @GeneratedValue
     private Long id;
 
+    Boolean validated;
+
     @NotBlank(message="Title may not be blank")
     String title;
     String content;
@@ -40,6 +42,7 @@ public class Post {
         this.creationDate = creationDate;
         this.author = author;
         this.links = new ArrayList<>();
+        this.validated = false; // a post is by default not validated
     }
 
     public Post(Long id, String title, String content, Date creationDate, BlogUser author) {
@@ -49,6 +52,7 @@ public class Post {
         this.creationDate = creationDate;
         this.author = author;
         this.links = new ArrayList<>();
+        this.validated = false; // a post is by default not validated
     }
 
     public String getTitle() {
@@ -101,5 +105,9 @@ public class Post {
 
     public void addLink(Link link) {
         this.links.add(link);
+    }
+
+    public void validate() {
+        this.validated = true;
     }
 }

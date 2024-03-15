@@ -1,3 +1,17 @@
+# Big Picture
+
+Ziel ist es verschiedene Telemetriedaten (Metriken, Logs, Traces) in Grafana zur Verfügung zu stellen um dort diese zu aggregieren und daraus in Dashboards Übersicht zu schaffen.
+
+Da die verschiedenen Telemetriedaten in unterschiedlichen Arten produziert, dargestellt und verarbeitet werden sind mehrere spezialisierte Subservices an Grafana angebunden.
+
+- Prometheus für Metriken
+- Tempo für Traces
+- Loki für Logs
+
+Davor vorgeschalten ist der OpenTelemetry Collector welcher wiederum ein einheitliches interface darstellt welches per API verwendet werden kann.
+
+Eine All-In-One implementation wird mit dem [grafana docker otel-lgtm](https://github.com/grafana/docker-otel-lgtm) zur Verfügung gestellt. 
+
 # Setup
 
 ## Prometheus

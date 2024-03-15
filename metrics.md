@@ -57,6 +57,23 @@ podman run -d --name promtail \
     -config.file=/mnt/config/promtail-config.yaml
 ```
 
+## Tempo
+
+Entnommen aus dem [code beispiel des git repositories](https://github.com/grafana/tempo/blob/main/example/docker-compose/local/docker-compose.yaml) wurden alle ports und konfiguration entfernt welche nicht direkt Tempo und OTLP betreffen.
+
+```
+podman volume create tempo-data
+podman run -d --name tempo \
+    -p 3200:3200 \
+    -p 9095:9095 \
+    -p 4317:4317 \
+    -p 4318:4318 \
+    -v tempo-data:/tmp/tempo \
+    -v $(pwd)/tempo/tempo.yaml:/etc/tempo.yaml \
+    docker.io/grafana/tempo \
+    -config.file=/etc/tempo.yaml
+```
+
 ## Grafana
 
 Wie in der [grafana docker dokumentation](https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/) beschrieben wird eine persistierte Instanz der OSS-Version erstellt.
@@ -85,6 +102,13 @@ Gleiches vorgehen wie bei der Prometheus Data source.
 Mit einer aktiven Loki instanz kann nun unter dem Menüpunkt "Connections/Data sources" eine neue Loki data source ausgewählt werden, [direktlink http://localhost:3500/connections/datasources/loki](http://localhost:3500/connections/datasources/loki).
 
 Dabei muss lediglich die Connection/URL mit "http://host.containers.internal:3100" angegeben werden. Für mehr info über die Loki connection siehe die [grafana dokumentation](https://grafana.com/docs/grafana/latest/datasources/loki/configure-loki-data-source/)
+
+### Setup Data source Tempo
+
+Gleiches vorgehen wie bei der Prometheus Data source.
+Mit einer aktiven Tempo instanz kann nun unter dem Menüpunkt "Connections/Data sources" eine neue Tempo data source ausgewählt werden, [direktlink http://localhost:3500/connections/datasources/tempo](http://localhost:3500/connections/datasources/tempo).
+
+Dabei muss lediglich die Connection/URL mit "http://host.containers.internal:3200" angegeben werden. Für mehr info über die Tempo connection siehe die [grafana dokumentation](https://grafana.com/docs/grafana/latest/datasources/tempo/configure-tempo-data-source/)
 
 ### Setup service account für Prometheus remote write
 

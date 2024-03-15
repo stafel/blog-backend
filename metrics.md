@@ -66,12 +66,27 @@ podman volume create tempo-data
 podman run -d --name tempo \
     -p 3200:3200 \
     -p 9095:9095 \
-    -p 4317:4317 \
-    -p 4318:4318 \
+    -p 4319:4317 \
+    -p 4320:4318 \
     -v tempo-data:/tmp/tempo \
     -v $(pwd)/tempo/tempo.yaml:/etc/tempo.yaml \
     docker.io/grafana/tempo \
     -config.file=/etc/tempo.yaml
+```
+
+## Open Telemetry Collector
+
+Aus dem [quick-start tutorial von open telemetry](https://opentelemetry.io/docs/collector/quick-start/) und [collector installation dokumentation von open telemetry](https://opentelemetry.io/docs/collector/installation/)
+
+Port 55679 wird für die debug webpages von zPages verwendet [http://localhost:55679/debug/servicez](http://localhost:55679/debug/servicez) und [http://localhost:55679/debug/tracez](http://localhost:55679/debug/tracez)
+
+```
+podman run -d --name otel-collector \
+  -p 4317:4317 \
+  -p 4318:4318 \
+  -p 55679:55679 \
+  -v $(pwd)/otel/config.yaml:/etc/otelcol-contrib/config.yaml
+  docker.io/otel/opentelemetry-collector
 ```
 
 ## Grafana

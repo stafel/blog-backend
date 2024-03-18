@@ -46,7 +46,8 @@ podman run -d --name prometheus \
     -p 9111:9090 \
     -v prometheus-data:/prometheus \
     -v "$(pwd)"/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
-    docker.io/prom/prometheus
+    docker.io/prom/prometheus \
+    --config.file=/etc/prometheus/prometheus.yml --web.enable-remote-write-receiver 
 ```
 
 Es sollte nun die webkonsole unter der addresse [http://localhost:9111](http://localhost:9111) aufrufbar sein.
@@ -94,7 +95,9 @@ podman run -d --name tempo \
 
 ## Open Telemetry Collector
 
-Aus dem [quick-start tutorial von open telemetry](https://opentelemetry.io/docs/collector/quick-start/) und [collector installation dokumentation von open telemetry](https://opentelemetry.io/docs/collector/installation/)
+Aus dem [quick-start tutorial von open telemetry](https://opentelemetry.io/docs/collector/quick-start/) und [collector installation dokumentation von open telemetry](https://opentelemetry.io/docs/collector/installation/). [Beispielkonfiguration des All-in-One images](https://github.com/grafana/docker-otel-lgtm/blob/main/docker/otelcol-config.yaml) als Vorlage verwenet.
+
+Wir verwenden das contrib-image da darin auch die inoffiziellen open source Komponenten enthalten sind wie der loki-Exporter.
 
 Port 55679 wird für die debug webpages von zPages verwendet [http://localhost:55679/debug/servicez](http://localhost:55679/debug/servicez) und [http://localhost:55679/debug/tracez](http://localhost:55679/debug/tracez)
 
@@ -103,8 +106,9 @@ podman run -d --name otel-collector \
   -p 4317:4317 \
   -p 4318:4318 \
   -p 55679:55679 \
-  -v $(pwd)/otel/config.yaml:/etc/otelcol-contrib/config.yaml
-  docker.io/otel/opentelemetry-collector
+  -v $(pwd)/otel/config.yaml:/etc/otelcol-contrib/config.yaml \
+  docker.io/otel/opentelemetry-collector-contrib \
+  --config=/etc/otelcol-contrib/config.yaml
 ```
 
 ## Grafana

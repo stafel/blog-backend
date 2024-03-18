@@ -8,11 +8,29 @@ Da die verschiedenen Telemetriedaten in unterschiedlichen Arten produziert, darg
 - Tempo für Traces
 - Loki für Logs
 
-Davor vorgeschalten ist der OpenTelemetry Collector welcher wiederum ein einheitliches interface darstellt welches per API verwendet werden kann.
+Davor vorgeschalten ist der OpenTelemetry Collector welcher wiederum ein einheitliches Interface darstellt welches per API verwendet werden kann.
 
-Eine All-In-One implementation wird mit dem [grafana docker otel-lgtm](https://github.com/grafana/docker-otel-lgtm) zur Verfügung gestellt. 
+# Containerisierung
+
+Die Anleitung bezieht sich auf den Betrieb der Container auf [Podman](https://podman.io/).
+
+Für Docker können die Befehle equivalent ausgeführt werden, dabei muss nur "podman" durch "docker" ersetzt werden.
+
+Aus ```podman volume create test``` wird somit ```docker volume create test```.
+
+Wird das vollständige Setup durchgespielt anstelle des All-in-One-Containers so müssen in den yaml-Files die Verweise auf die Hostmaschine "host.containers.internal" durch "host.docker.internal" ersetzt werden.
 
 # Setup
+
+Eine All-In-One-Implementation für einen schnellen Setup für lokale Tests wird mit dem [grafana docker otel-lgtm](https://github.com/grafana/docker-otel-lgtm) zur Verfügung gestellt. 
+
+Mit folgendem Befehl kann ein open telemetry container erstellt werden.
+
+```
+podman run -d --name otel-aio -p 3000:3000 -p 4317:4317 -p 4318:4318 docker.io/grafana/otel-lgtm
+```
+
+Nachfolgend finden Sie eine Schritt für Schritt Setup welches die einzelnen Services in separaten Containern betreibt um das ganze in einer bestehenden Umgebung verteilt zu betreiben und mit verschiedenen Interfaces zu befüllen (open telemetry, prometheus metrics websites, promtail log exporter, usw...).
 
 ## Prometheus
 

@@ -18,7 +18,7 @@ Für Docker können die Befehle equivalent ausgeführt werden, dabei muss nur "p
 
 Aus ```podman volume create test``` wird somit ```docker volume create test```.
 
-Wird das vollständige Setup durchgespielt anstelle des All-in-One-Containers so müssen in den yaml-Files die Verweise auf die Hostmaschine "host.containers.internal" durch "host.docker.internal" ersetzt werden.
+Wird das vollständige Setup durchgespielt anstelle des All-in-One-Containers so müssen in der Anleitung und in den yaml-Files die Verweise auf die Hostmaschine "host.containers.internal" durch "host.docker.internal" ersetzt werden.
 
 # Setup
 

@@ -13,6 +13,6 @@ opentelemetry-instrument \
   --logs_exporter otlp \
   --metric_export_interval 5000 \
   --exporter_otlp_protocol 'http/protobuf' \
-  --exporter_otlp_endpoint 'http://localhost:4320' \
+  --exporter_otlp_endpoint 'http://localhost:4318' \
   --service_name uvicorn-test \
   uvicorn main:app

@@ -10,9 +10,18 @@ processors:
 
 exporters:
   otlp:
-    endpoint: localhost:4319
-  prometheus:
-    endpoint: localhost:9111
+    endpoint: http://host.containers.internal:4319
+    tls:
+      insecure: true
+  otlphttp:
+    endpoint: http://host.containers.internal:4320
+    tls:
+      insecure: true
+  prometheusremotewrite:
+    endpoint: http://host.containers.internal:9111/api/v1/write
+    add_metric_suffixes: true
+  loki:
+    endpoint: http://host.containers.internal:3100/loki/api/v1/push
 
 extensions:
   health_check:
@@ -29,8 +38,8 @@ service:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [prometheus]
+      exporters: [prometheusremotewrite]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp]
+      exporters: [loki]

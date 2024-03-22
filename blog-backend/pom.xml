@@ -78,6 +78,10 @@
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-mysql</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-opentelemetry</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

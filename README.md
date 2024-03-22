@@ -1,6 +1,11 @@
 # blog-backend
 
 Blog backend in Java Quarkus für das HFTM Modul IN306 Verteilte Systeme.
+In einer nachfolgenden Refaktorierung wurde das Projekt mit open telemetry ergänzt.
+
+Siehe file [telemetry.md](./telemetry.md) für den Aufbau des generell nutzbaren Telemetrie-Umsystems.
+
+Siehe file [quarkus-otel.md](./quarkus-otel.md) für die Dokumentation zur Nachrüstung eines Quarkusprojektes mit open telemetry.
 
 # Starten und Testen
 
@@ -20,7 +25,18 @@ Siehe [guide quarkus with podman](https://quarkus.io/guides/podman).
 export DOCKER_HOST=unix:///run/user/1000/podman/podman.sock
 ```
 
-*Wichtig: um mit einem MariaDB container betrieben zu werden muss die environment variable QUARKUS_DATASOURCE_PASSWORD gesetzt werden. Am einfachsten geht dies mit einem .env file im blog-backend directory*
+*Wichtig: um mit einem MariaDB container betrieben zu werden muss die environment variable QUARKUS_DATASOURCE_PASSWORD gesetzt werden. Am einfachsten geht dies mit einem .env file im blog-backend directory. Testweise kann dies auch per export gesetzt werden*
+
+```
+export QUARKUS_DATASOURCE_PASSWORD=12345
+```
+
+
+## Bauen des Containerimages
+
+```
+./mvnw package -Dnative -Dquarkus.native.container-build=true
+```
 
 ## Einrichten der Hilfs-Cotainer
 
@@ -35,17 +51,24 @@ podman network create blog-nw
 Erstellen einen mariadb containers.
 
 ```
-podman run -d --name=backend-mariadb -p 9001:3306 --network blog-nw -e MARIADB_USER=backend -e MARIADB_PASSWORD=<YourPassHere> -e MARIADB_ROOT_PASSWORD=<YourPassHere> mariadb:latest
+podman run -d --name=backend-mariadb -p 9001:3306 --network blog-nw -e MARIADB_USER=backend -e MARIADB_PASSWORD=YourPassHere -e MARIADB_ROOT_PASSWORD=YourPassHere docker.io/mariadb:10.11
 ```
 
 Erstellen der Datenbank und vergeben der Rechte auf der podman-container-Konsole.
+
+Sie können dabei auch per podman exec befehl auf das container terminal zugreifen. 
+```
+podman exec -t -i backend-mariadb /bin/sh
+```
 
 ```
 mariadb -u root -p
 # Login with the root password here
 create database blog_backend;
-create user backend@blog_backend identified by '<YourPassHere>';
+create user backend@blog_backend identified by 'YourPassHere';
 GRANT ALL PRIVILEGES ON blog_backend.* To backend;
+exit
+exit
 ```
 
 *In einem produktiven system darf der backend user nicht vollprivilegien haben*

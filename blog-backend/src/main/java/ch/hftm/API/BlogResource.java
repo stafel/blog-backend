@@ -21,12 +21,17 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.UriInfo;
 
+import org.jboss.logging.Logger;
+
 /**
  * Main entry point for the blog
  * Will hand off requests to corresponding Subresource Locators
  */
 @Path("blog")
 public class BlogResource {
+
+    @Inject
+    Logger log;
 
     @Context
     UriInfo uriInfo;
@@ -46,8 +51,10 @@ public class BlogResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Blog getBlog() {
+        log.info("Getting blog");
         Blog blog = blogRepository.getBlog();
 
+        log.info("Adding links to blog");
         // possibility to update this blog
         blog.addLink(
             new Link(
@@ -77,6 +84,8 @@ public class BlogResource {
                 "GET"
                 )
         );
+
+        log.info("Finished building blog response");
 
         return blog;
     }

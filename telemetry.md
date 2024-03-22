@@ -10,6 +10,16 @@ Da die verschiedenen Telemetriedaten in unterschiedlichen Arten produziert, darg
 
 Davor vorgeschalten ist der OpenTelemetry Collector welcher wiederum ein einheitliches Interface darstellt welches per API verwendet werden kann.
 
+# Wie Instrumentieren
+
+Wie Sie nun welche Daten an welche Services senden kommt auf Ihren UseCase an.
+
+Wenn Sie nur Operations durchführen, keinen Sourcecode besitzen oder nur grobe standard Telemetriedaten benötigen kann eine [automatische Zero-code Instrumentation](https://opentelemetry.io/docs/concepts/instrumentation/zero-code/) ausreichen. Diese Standardinstrumentation ist schnell aufgesetzt, Sie müssen lediglich die Verbindungsdaten parametrisieren. Für die Anleitung prüfen Sie das Kapitel "Automatic" in der ensprechenden Sprache der offiziellen OpenTelemetry-Dokumentation, z.B: [offizielle OpenTelemetry Java Automatic Instrumentation Guide](https://opentelemetry.io/docs/languages/java/automatic/)
+
+Ein solches Beispiel sehen Sie im Verzeichnis [otel-example-python](./otel-example-python/). Der eigentliche python code in main.py ist unberührt, die Instrumentation wird in start.sh injected.
+
+Ebenfalls können Loggingdaten von Docker, Podman und [Kubernetes](https://grafana.com/blog/2023/04/12/how-to-collect-and-query-kubernetes-logs-with-grafana-loki-grafana-and-grafana-agent/) automatisch an die Loki Loggingdatenbank weitergegeben werden. Siehe Kapitel "Loki als Docker logging driver einsetzen" und "Loki in portainer.io als driver einsetzten" für die Anleitung.
+
 # Containerisierung
 
 Die Anleitung bezieht sich auf den Betrieb der Container auf [Podman](https://podman.io/).
@@ -75,6 +85,33 @@ podman run -d --name promtail \
     docker.io/grafana/promtail \
     -config.file=/mnt/config/promtail-config.yaml
 ```
+
+### Loki als Docker logging driver einsetzen
+
+Entnommen aus der [Anleitung von yuriktech "Collecting Docker Logs with Loki"](https://yuriktech.com/2020/03/21/Collecting-Docker-Logs-With-Loki/)
+
+Docker bietet ein logging driver plugin welches die logs welche vom container generiert werden direkt nach loki pushen kann.
+
+Dieser driver kann mit dem nachfolgenden Befehl installiert werden.
+
+```
+docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions
+```
+
+Für einzelne Container kann nun dieser per Docker-compose.yaml aktiviert werden.
+
+```
+logging:
+  driver: loki
+  options:
+    loki-url: "http://host.docker.internal:3100/loki/api/v1/push"
+```
+
+### Loki in portainer.io als driver einsetzten
+
+Gleich wie in Docker kann auch in [Portainer](portainer.io) der ensprechende loki Logging Driver eingesetzt werden. Hier muss eine logging driver option für die export url per "loki-url" gesetzt werden.
+
+![screenshot loki driver in portainer](./imgs/loki_in_portainer.png)
 
 ## Tempo
 

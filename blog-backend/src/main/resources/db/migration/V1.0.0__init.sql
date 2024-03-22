@@ -8,7 +8,7 @@ CREATE TABLE Blog (
     nickname VARCHAR(255) NOT NULL,
     description TEXT,
     logoUrl VARCHAR(255) NOT NULL
-)
+);
 
 CREATE TABLE BlogUser (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -22,8 +22,9 @@ CREATE TABLE Post (
     title VARCHAR(255) NOT NULL,
     content TEXT,
     creationDate DATE,
+    author_id BIGINT,
     CONSTRAINT `fk_author`
-        FOREIGN KEY (author) REFERENCES BlogUser (id)
+        FOREIGN KEY (author_id) REFERENCES BlogUser (id)
         ON DELETE CASCADE
         ON UPDATE RESTRICT
 );
@@ -31,12 +32,14 @@ CREATE TABLE Post (
 CREATE TABLE Comment (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     text MEDIUMTEXT,
+    author_id BIGINT,
+    post_id BIGINT,
     CONSTRAINT `fk_post`
-        FOREIGN KEY (post) REFERENCES Post (id)
+        FOREIGN KEY (post_id) REFERENCES Post (id)
         ON DELETE CASCADE
-        ON UPDATE RESTRICT
+        ON UPDATE RESTRICT,
     CONSTRAINT `fk_author`
-        FOREIGN KEY (author) REFERENCES BlogUser (id)
+        FOREIGN KEY (author_id) REFERENCES BlogUser (id)
         ON DELETE CASCADE
         ON UPDATE RESTRICT
-)
+);

@@ -20,8 +20,18 @@ scrape_configs:
     static_configs:
       - targets: ['host.containers.internal:9111']
 
+  # this is our blog backend
+  - job_name: 'blog-backend'
+    scrape_interval: 5s
+
+    metrics_path: '/q/metrics'
+
+    static_configs:
+      - targets: ['host.containers.internal:8085']
+
 remote_write:
 - url: http://host.containers.internal:3500
   basic_auth:
     username: prometheus
+    # set your key here
     password: <Your Grafana.com API Key>

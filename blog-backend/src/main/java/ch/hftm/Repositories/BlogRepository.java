@@ -7,14 +7,28 @@ import ch.hftm.Entities.Post;
 import ch.hftm.Entities.Blog;
 import ch.hftm.Entities.BlogUser;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import io.quarkus.hibernate.orm.panache.Panache;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Metrics;
 
 @ApplicationScoped
 public class BlogRepository implements PanacheRepository<Blog> {
+
+    MeterRegistry registry = Metrics.globalRegistry;
+
+    Counter blogRequests;
+
     public BlogRepository() {
-        
+        // a counter for the number of returns of blog https://quarkus.io/guides/telemetry-micrometer
+        blogRequests = Counter.builder("blog.requests")
+            .baseUnit("connections") // see https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/BaseUnits.java
+            .description("number of requests to the blog endpoint since startup")
+            .tags("blog", "test")
+            .register(registry);
     }
 
     @Transactional
@@ -23,6 +37,7 @@ public class BlogRepository implements PanacheRepository<Blog> {
     }
 
     public Blog getBlog() {
+        blogRequests.increment(); // here we increment our custom counter
         return this.findById(1L); // lazy method just return the first ever created blog
     }
 

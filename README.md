@@ -3,122 +3,49 @@
 Blog backend in Java Quarkus für das HFTM Modul IN306 Verteilte Systeme.
 In einer nachfolgenden Refaktorierung wurde das Projekt mit open telemetry ergänzt.
 
+Siehe Kapitle [Quickstart](#Quickstart) für einen einfachen Aufbau eines Testfalles mit Open Telemetry Tracing.
+
 Siehe file [telemetry.md](./telemetry.md) für den Aufbau des generell nutzbaren Telemetrie-Umsystems.
 
 Siehe file [quarkus-otel.md](./quarkus-otel.md) für die Dokumentation zur Nachrüstung eines Quarkusprojektes mit open telemetry.
 
-# Starten und Testen
+# Quickstart
 
-Projekt kann im Verzeichnis blog-backend  gestartet werden mit dem Befehl:
+Erstellen sie das Netzwerk und starten sie die benötigten Container der Applikation (MariaDB, Keycloak, Quarkus Backend) und der OpenTelemetry All-in-one-Container mit folgenden Befehlen.
 
-```
-./mvnw quarkus:dev
-```
-
-Auf der Quarkus-Konsole kann mit *r* das Testing gestartet werden.
-
-*Wichtig: um mit podman betrieben zu werden muss die DOCKER_HOST env gesetzt werden*
-
-Siehe [guide quarkus with podman](https://quarkus.io/guides/podman).
+Docker-Befehle:
 
 ```
-export DOCKER_HOST=unix:///run/user/1000/podman/podman.sock
+docker network create blog-nw
+
+docker run -d --name=backend-mariadb -p 9001:3306 --network blog-nw -v ./mariadb/init.sql:/data/application/init.sql -e MARIADB_USER=backend -e MARIADB_PASSWORD=YourPassHere -e MARIADB_ROOT_PASSWORD=YourPassHere docker.io/mariadb:10.11 --init-file /data/application/init.sql
+
+docker run -d --name blog-keycloak -p 8080:8080 --network blog-nw -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=super$ecret1! quay.io/keycloak/keycloak:latest start-dev
+
+docker run -d --name otel-aio -p 3000:3000 -p 4317:4317 -p 4318:4318 --network blog-nw docker.io/grafana/otel-lgtm
+
+docker run -d --name blog-backend -p 8085:8085 -e quarkus.datasource.jdbc.url=jdbc:mariadb://host.docker.internal:9001/blog_backend -e quarkus.otel.exporter.otlp.traces.endpoint=http://host.docker.internal:4317  --network blog-nw ghcr.io/stafel/blog-backend:latest
 ```
 
-*Wichtig: um mit einem MariaDB container betrieben zu werden muss die environment variable QUARKUS_DATASOURCE_PASSWORD gesetzt werden. Am einfachsten geht dies mit einem .env file im blog-backend directory. Testweise kann dies auch per export gesetzt werden*
-
-```
-export QUARKUS_DATASOURCE_PASSWORD=YourPassHere
-```
-
-
-## Bauen des Containerimages
-
-```
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-## Einrichten der Hilfs-Cotainer
-
-Erstellen des Netzwerks
+Podman-Befehle:
 
 ```
 podman network create blog-nw
-```
 
-### Erstellen eines MariaDB containers auf Podman
+podman run -d --name=backend-mariadb -p 9001:3306 --network blog-nw -v ./mariadb/init.sql:/data/application/init.sql -e MARIADB_USER=backend -e MARIADB_PASSWORD=YourPassHere -e MARIADB_ROOT_PASSWORD=YourPassHere docker.io/mariadb:10.11 --init-file /data/application/init.sql
 
-Erstellen einen mariadb containers.
-
-```
-podman run -d --name=backend-mariadb -p 9001:3306 --network blog-nw -e MARIADB_USER=backend -e MARIADB_PASSWORD=YourPassHere -e MARIADB_ROOT_PASSWORD=YourPassHere docker.io/mariadb:10.11
-```
-
-Erstellen der Datenbank und vergeben der Rechte auf der podman-container-Konsole.
-
-Sie können dabei auch per podman exec befehl auf das container terminal zugreifen. 
-```
-podman exec -t -i backend-mariadb /bin/sh
-```
-
-```
-mariadb -u root -p
-# Login with the root password here
-create database blog_backend;
-create user backend@blog_backend identified by 'YourPassHere';
-GRANT ALL PRIVILEGES ON blog_backend.* To backend;
-exit
-exit
-```
-
-*In einem produktiven system darf der backend user nicht vollprivilegien haben*
-
-### Erstellen eines MySQL containers auf Podman
-
-TODO 
-https://moodle.hftm.ch/mod/page/view.php?id=206192
-https://quarkus.io/guides/datasource
-
-### Erstellen eines Keycloak containers auf Podman
-
-Starten des Keycloak containers
-
-```
 podman run -d --name blog-keycloak -p 8080:8080 --network blog-nw -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=super$ecret1! quay.io/keycloak/keycloak:latest start-dev
+
+podman run -d --name otel-aio -p 3000:3000 -p 4317:4317 -p 4318:4318 --network blog-nw docker.io/grafana/otel-lgtm
+
+podman run -d --name blog-backend -p 8085:8085 -e quarkus.datasource.jdbc.url=jdbc:mariadb://host.containers.internal:9001/blog_backend -e quarkus.otel.exporter.otlp.traces.endpoint=http://host.containers.internal:4317  --network blog-nw ghcr.io/stafel/blog-backend:latest
 ```
 
-# Stand
+Es ist nun die Quarkus-Konsole auf [http://localhost:8085/](http://localhost:8085/) und das Grafana-Dashboard unter [http://localhost:3000/login](http://localhost:3000/login) sichtbar.
 
-- [x] Readme erstellen
-- [x] Quarkus projekt aufgebaut mit /blog endpoint
-- [X] MariaDB container erstellt
-- [X] MariaDB container angebunden
-- [X] Persistieren von Blogdateien
-- [X] Blogposts abfragen, erstellen, löschen per REST
-- [ ] Bug DB wird neu erstellt bei jedem Start und löscht bestehende Daten
-- [X] [OpenAPI spec](/docs/openapi.json) view [in the swagger editor](https://editor.swagger.io/)
-  - [X] PUT Request zum updaten von blog, post, user
-  - [X] Query-Parameter zur filterung von posts
-  - [X] Fehler-Responses beim Versuch eine nicht vorhandene Resource zu löschen
-  - [X] Linking nach [RFC5988](https://datatracker.ietf.org/doc/html/rfc5988) for [HATEOAS](https://restfulapi.net/hateoas/)
-- [ ] OpenAPI spec umgesetzt
-  -[X] PUT request
-  -[X] Query params
-  -[X] Fehler response
-  -[ ] Links
-- [ ] Blog kommentar als DTO
-  - [X] API get, post
-  - [ ] Persistenz
-  - [ ] Dokumentiert
-- [ ] Containerisierung
-  - [X] Containerisieren
-  - [X] Publish
-  - [ ] Dokumentation Keycloak
-- [ ] MySQL db
-  - [X] Dependencies
-  - [X] Migrationsfile
-  - [ ] MySQL container
-  - [ ] Publish
+Loggen sie sich in Grafana mit Username "admin" und Passwort "admin" ein.
+
+Wenn sie nun einen blog-endpoint ansprechen (z.B. [http://localhost:8085/blog](http://localhost:8085/blog)) erhalten sie einen Trace in der [Tempo-Datasource in Grafana](http://localhost:3000/explore?schemaVersion=1&panes=%7B%22TCD%22:%7B%22datasource%22:%22tempo%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22datasource%22:%7B%22type%22:%22tempo%22,%22uid%22:%22tempo%22%7D,%22queryType%22:%22traceqlSearch%22,%22limit%22:20,%22tableType%22:%22traces%22,%22filters%22:%5B%7B%22id%22:%226235affa%22,%22operator%22:%22%3D%22,%22scope%22:%22span%22%7D%5D%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D%7D&orgId=1)
   
 # Berechtigungskonzept
 
@@ -154,34 +81,3 @@ podman run -d --name blog-keycloak -p 8080:8080 --network blog-nw -e KEYCLOAK_AD
   - GET: Offen
   - PUT: User-Rolle und User stimmt überein
   - DELETE: User-Rolle und User stimmt überein oder Admin-Rolle
-
-# Container-Image Build, Package and Publish
-
-Alle Befehle im Verzeichnis *blog-Backend* ausführen.
-
-Erstellen der Artefakte in src/target mit Befehl
-
-```
-./mvnw package
-```
-
-Erstellen des container images via podman mit
-
-```
-podman build -f src/main/docker/Dockerfile.jvm -t ghcr.io/stafel/blog-backend:latest .
-```
-
-Optional falls nicht bereits getan: Login auf ghcr.io per
-
-```
-podman login ghcr.io -u stafel
-```
-
-
-Pushen nach ghcr.io mit
-
-```
-podman push ghcr.io/stafel/blog-backend:latest
-```
-
-Package sollte nun unter dem blog-backend repository in github verfügbar sein.

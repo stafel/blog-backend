@@ -28,7 +28,7 @@ export DOCKER_HOST=unix:///run/user/1000/podman/podman.sock
 *Wichtig: um mit einem MariaDB container betrieben zu werden muss die environment variable QUARKUS_DATASOURCE_PASSWORD gesetzt werden. Am einfachsten geht dies mit einem .env file im blog-backend directory. Testweise kann dies auch per export gesetzt werden*
 
 ```
-export QUARKUS_DATASOURCE_PASSWORD=12345
+export QUARKUS_DATASOURCE_PASSWORD=YourPassHere
 ```
 
 
